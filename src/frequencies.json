@@ -1,104 +1,604 @@
 {
   "frequencies": [
-  { "frequency": 16.35, "note": "C0"},
-  { "frequency": 17.32, "note": "Db0"},
-  { "frequency": 18.35, "note": "D0"},
-  { "frequency": 19.45, "note": "Eb0"},
-  { "frequency": 20.6, "note": "E0"},
-  { "frequency": 21.83, "note": "F0"},
-  { "frequency": 23.12, "note": "Gb0"},
-  { "frequency": 24.5, "note": "G0"},
-  { "frequency": 25.96, "note": "Ab0"},
-  { "frequency": 27.5, "note": "A0"},
-  { "frequency": 29.14, "note": "Bb0"},
-  { "frequency": 30.87, "note": "B0"},
-  { "frequency": 32.7, "note": "C1"},
-  { "frequency": 34.65, "note": "Db1"},
-  { "frequency": 36.71, "note": "D1"},
-  { "frequency": 38.89, "note": "Eb1"},
-  { "frequency": 41.2, "note": "E1"},
-  { "frequency": 43.65, "note": "F1"},
-  { "frequency": 46.25, "note": "Gb1"},
-  { "frequency": 49,      "note": "G1"},
-  { "frequency": 51.91,   "note": "Ab1"},
-  { "frequency": 55,      "note": "A1"},
-  { "frequency": 58.27,   "note": "Bb1"},
-  { "frequency": 61.74,   "note": "B1"},
-  { "frequency": 65.41,   "note": "C2"},
-  { "frequency": 69.3,    "note": "Db2"},
-  { "frequency": 73.42,   "note": "D2"},
-  { "frequency": 77.78,   "note": "Eb2"},
-  { "frequency": 82.41,   "note": "E2"},
-  { "frequency": 87.31,   "note": "F2"},
-  { "frequency": 92.5,    "note": "Gb2"},
-  { "frequency": 98,      "note": "G2"},
-  { "frequency": 103.83,  "note": "Ab2"},
-  { "frequency": 110,     "note": "A2"},
-  { "frequency": 116.54,  "note": "Bb2"},
-  { "frequency": 123.47,  "note": "B2"},
-  { "frequency": 130.81,  "note": "C3"},
-  { "frequency": 138.59,  "note": "Db3"},
-  { "frequency": 146.83,  "note": "D3"},
-  { "frequency": 155.56,  "note": "Eb3"},
-  { "frequency": 164.81,  "note": "E3"},
-  { "frequency": 174.61,  "note": "F3"},
-  { "frequency": 185,     "note": "Gb3"},
-  { "frequency": 196,     "note": "G3"},
-  { "frequency": 207.65,  "note": "Ab3"},
-  { "frequency": 220,     "note": "A3"},
-  { "frequency": 233.08,  "note": "Bb3"},
-  { "frequency": 246.94,  "note": "B3"},
-  { "frequency": 261.63,  "note": "C4"},
-  { "frequency": 277.18,  "note": "Db4"},
-  { "frequency": 293.66,  "note": "D4"},
-  { "frequency": 311.13,  "note": "Eb4"},
-  { "frequency": 329.63,  "note": "E4"},
-  { "frequency": 349.23,  "note": "F4"},
-  { "frequency": 369.99,  "note": "Gb4"},
-  { "frequency": 392,     "note": "G4"},
-  { "frequency": 415.3,   "note": "Ab4"},
-  { "frequency": 440,     "note": "A4"},
-  { "frequency": 466.16,  "note": "Bb4"},
-  { "frequency": 493.88,  "note": "B4"},
-  { "frequency": 523.25,  "note": "C5"},
-  { "frequency": 554.37,  "note": "Db5"},
-  { "frequency": 587.33,  "note": "D5"},
-  { "frequency": 622.25,  "note": "Eb5"},
-  { "frequency": 659.26,  "note": "E5"},
-  { "frequency": 698.46,  "note": "F5"},
-  { "frequency": 739.99,  "note": "Gb5"},
-  { "frequency": 783.99,  "note": "G5"},
-  { "frequency": 880,     "note": "A5"},
-  { "frequency": 830.61,  "note": "Ab5"},
-  { "frequency": 932.33,  "note": "Bb5"},
-  { "frequency": 987.77,  "note": "B5"},
-  { "frequency": 1046.5,  "note": "C6"},
-  { "frequency": 1108.73, "note": "Db6"},
-  { "frequency": 1174.66, "note": "D6"},
-  { "frequency": 1244.51, "note": "Eb6"},
-  { "frequency": 1318.51, "note": "E6"},
-  { "frequency": 1396.91, "note": "F6"},
-  { "frequency": 1479.98, "note": "Gb6"},
-  { "frequency": 1567.98, "note": "G6"},
-  { "frequency": 1661.22, "note": "Ab6"},
-  { "frequency": 1760,    "note": "A6"},
-  { "frequency": 1864.66, "note": "Bb6"},
-  { "frequency": 1975.53, "note": "B6"},
-  { "frequency": 2093,    "note": "C7"},
-  { "frequency": 2217.46, "note": "Db7"},
-  { "frequency": 2349.32, "note": "D7"},
-  { "frequency": 2489.02, "note": "Eb7"},
-  { "frequency": 2637.02, "note": "E7"},
-  { "frequency": 2793.83, "note": "F7"},
-  { "frequency": 2959.96, "note": "Gb7"},
-  { "frequency": 3135.96, "note": "G7"},
-  { "frequency": 3520,    "note": "A7"},
-  { "frequency": 3322.44, "note": "Ab7"},
-  { "frequency": 3729.31, "note": "Bb7"},
-  { "frequency": 3951.07, "note": "B7"},
-  { "frequency": 4186.01, "note": "C8"},
-  { "frequency": 4434.92, "note": "Db8"},
-  { "frequency": 4698.64, "note": "D8"},
-  { "frequency": 4978.0,  "note":  "Eb8"}
+    {
+      "accidental": "natural",
+      "frequency": 16.35,
+      "octave": 0,
+      "note": "C"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 17.32,
+      "octave": 0,
+      "note": "D"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 18.35,
+      "octave": 0,
+      "note": "D"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 19.45,
+      "octave": 0,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 20.6,
+      "octave": 0,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 21.83,
+      "octave": 0,
+      "note": "F"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 23.12,
+      "octave": 0,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 24.5,
+      "octave": 0,
+      "note": "G"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 25.96,
+      "octave": 0,
+      "note": "A"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 27.5,
+      "octave": 0,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 29.14,
+      "octave": 0,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 30.87,
+      "octave": 0,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 32.7,
+      "octave": 1,
+      "note": "C"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 34.65,
+      "octave": 1,
+      "note": "D"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 36.71,
+      "octave": 1,
+      "note": "D"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 38.89,
+      "octave": 1,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 41.2,
+      "octave": 1,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 43.65,
+      "octave": 1,
+      "note": "F"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 46.25,
+      "octave": 1,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 49,
+      "octave": 1,
+      "note": "G"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 51.91,
+      "octave": 1,
+      "note": "A"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 55,
+      "octave": 1,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 58.27,
+      "octave": 1,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 61.74,
+      "octave": 1,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 65.41,
+      "octave": 2,
+      "note": "C"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 69.3,
+      "octave": 2,
+      "note": "D"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 73.42,
+      "octave": 2,
+      "note": "D"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 77.78,
+      "octave": 2,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 82.41,
+      "octave": 2,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 87.31,
+      "octave": 2,
+      "note": "F"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 92.5,
+      "octave": 2,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 98,
+      "octave": 2,
+      "note": "G"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 103.83,
+      "octave": 2,
+      "note": "A"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 110,
+      "octave": 2,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 116.54,
+      "octave": 2,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 123.47,
+      "octave": 2,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 130.81,
+      "octave": 3,
+      "note": "C"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 138.59,
+      "octave": 3,
+      "note": "D"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 146.83,
+      "octave": 3,
+      "note": "D"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 155.56,
+      "octave": 3,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 164.81,
+      "octave": 3,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 174.61,
+      "octave": 3,
+      "note": "F"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 185,
+      "octave": 3,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 196,
+      "octave": 3,
+      "note": "G"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 207.65,
+      "octave": 3,
+      "note": "A"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 220,
+      "octave": 3,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 233.08,
+      "octave": 3,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 246.94,
+      "octave": 3,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 261.63,
+      "octave": 4,
+      "note": "C"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 277.18,
+      "octave": 4,
+      "note": "D"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 293.66,
+      "octave": 4,
+      "note": "D"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 311.13,
+      "octave": 4,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 329.63,
+      "octave": 4,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 349.23,
+      "octave": 4,
+      "note": "F"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 369.99,
+      "octave": 4,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 392,
+      "octave": 4,
+      "note": "G"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 415.3,
+      "octave": 4,
+      "note": "A"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 440,
+      "octave": 4,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 466.16,
+      "octave": 4,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 493.88,
+      "octave": 4,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 523.25,
+      "octave": 5,
+      "note": "C"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 554.37,
+      "octave": 5,
+      "note": "D"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 587.33,
+      "octave": 5,
+      "note": "D"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 622.25,
+      "octave": 5,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 659.26,
+      "octave": 5,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 698.46,
+      "octave": 5,
+      "note": "F"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 739.99,
+      "octave": 5,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 783.99,
+      "octave": 5,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 880,
+      "octave": 5,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 830.61,
+      "octave": 5,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 932.33,
+      "octave": 5,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 987.77,
+      "octave": 5,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 1046.5,
+      "octave": 6,
+      "note": "C"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 1108.73,
+      "octave": 6,
+      "note": "D"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 1174.66,
+      "octave": 6,
+      "note": "D"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 1244.51,
+      "octave": 6,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 1318.51,
+      "octave": 6,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 1396.91,
+      "octave": 6,
+      "note": "F"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 1479.98,
+      "octave": 6,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 1567.98,
+      "octave": 6,
+      "note": "G"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 1661.22,
+      "octave": 6,
+      "note": "A"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 1760,
+      "octave": 6,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 1864.66,
+      "octave": 6,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 1975.53,
+      "octave": 6,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 2093,
+      "octave": 7,
+      "note": "C"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 2217.46,
+      "octave": 7,
+      "note": "D"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 2349.32,
+      "octave": 7,
+      "note": "D"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 2489.02,
+      "octave": 7,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 2637.02,
+      "octave": 7,
+      "note": "E"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 2793.83,
+      "octave": 7,
+      "note": "F"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 2959.96,
+      "octave": 7,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 3135.96,
+      "octave": 7,
+      "note": "G"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 3520,
+      "octave": 7,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 3322.44,
+      "octave": 7,
+      "note": "A"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 3729.31,
+      "octave": 7,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 3951.07,
+      "octave": 7,
+      "note": "B"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 4186.01,
+      "octave": 8,
+      "note": "C"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 4434.92,
+      "octave": 8,
+      "note": "D"
+    },
+    {
+      "accidental": "natural",
+      "frequency": 4698.64,
+      "octave": 8,
+      "note": "D"
+    },
+    {
+      "accidental": "flat",
+      "frequency": 4978,
+      "octave": 8,
+      "note": "E"
+    }
   ]
 }
