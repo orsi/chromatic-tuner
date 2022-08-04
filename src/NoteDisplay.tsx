@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { TAccidental } from "./App";
+import AccuracySlide from "./AccuracySlide";
+import { TAccidental } from "./pitch.service";
 
 interface NoteDisplayProps {
   accidental: TAccidental;
@@ -11,12 +12,21 @@ interface NoteDisplayProps {
 
 export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
   return (
-    <>
+    <View>
       <View
         style={{
-          flexDirection: "row",
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <AccuracySlide cents={cents} />
+      </View>
+      <View
+        style={{
+          alignItems: "center",
           justifyContent: "center",
-          marginLeft: -16,
+          paddingVertical: 32,
         }}
       >
         <View
@@ -51,15 +61,15 @@ export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
             {octave}
           </Text>
         </View>
+        <View style={{ alignItems: "center" }}>
+          <Text style={{ fontSize: 10 }}>
+            cents
+          </Text>
+          <Text style={{ fontSize: 16 }}>
+            {cents}
+          </Text>
+        </View>
       </View>
-      <View style={{ alignItems: "center" }}>
-        <Text style={{ fontSize: 10 }}>
-          cents
-        </Text>
-        <Text style={{ fontSize: 16 }}>
-          {cents}
-        </Text>
-      </View>
-    </>
+    </View>
   );
 };

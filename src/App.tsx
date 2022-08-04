@@ -5,7 +5,6 @@ import pitchfinder from "pitchfinder";
 import { getPitchedNote, IPitchedNote } from "./pitch.service";
 import FrequencyDisplay from "./FrequencyDisplay";
 import NoteDisplay from "./NoteDisplay";
-import AccuracySlide from "./AccuracySlide";
 
 const SAMPLE_RATE = 22050;
 const BUFFER_SIZE = 2048;
@@ -74,19 +73,22 @@ const App = () => {
   return (
     <SafeAreaView
       style={{
+        justifyContent: "space-between",
         alignItems: "center",
         backgroundColor: "white",
-        paddingHorizontal: 20,
         width: "100%",
         height: "100%",
       }}
     >
-      <View style={{ flex: 1, justifyContent: "flex-start" }}>
+      <View
+        style={{
+          justifyContent: "flex-start",
+        }}
+      >
         <FrequencyDisplay frequency={detectedFrequency} />
       </View>
       <View
         style={{
-          flex: 1,
           justifyContent: "center",
           width: "100%",
         }}
@@ -98,19 +100,7 @@ const App = () => {
           octave={pitchedNote.octave}
         />
       </View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "flex-start",
-          alignItems: "center",
-          marginTop: 64,
-          width: "100%",
-        }}
-      >
-        <AccuracySlide
-          cents={pitchedNote.cents}
-        />
-      </View>
+      <View />
     </SafeAreaView>
   );
 };

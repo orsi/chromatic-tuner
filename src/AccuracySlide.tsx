@@ -1,71 +1,91 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, Easing, Text, View } from "react-native";
+import {
+  Animated,
+  Dimensions,
+  LayoutChangeEvent,
+  LayoutRectangle,
+  View,
+} from "react-native";
 
-const CROSSHAIR_SIZE = 32;
+const ACCURATE_CLOSE = 25;
+const ACCURATE_GOOD = 10;
 
 interface AccuracySlideProps {
   cents: number;
 }
 
 export default ({ cents }: AccuracySlideProps) => {
-  const [width, setWidth] = useState<number>(0);
+  const [viewLayout, setViewLayout] = useState<LayoutRectangle>();
   const transformation = useRef(new Animated.Value(1)).current;
 
+  const isClose = cents > -ACCURATE_CLOSE && cents < ACCURATE_CLOSE;
+  const isGood = cents > -ACCURATE_GOOD && cents < ACCURATE_GOOD;
+
+  const windowWidth = Dimensions.get("window").width;
+
   useEffect(() => {
-    const translation = (width * Math.abs((cents + 50) % 100) / 100) -
-      (CROSSHAIR_SIZE / 2);
+    let translation = 0;
+    if (viewLayout) {
+      translation = (windowWidth * Math.abs((cents + 49) % 100) / 100) -
+        (viewLayout.height / 2);
+    }
     Animated.timing(transformation, {
       toValue: translation,
-      duration: 250,
+      duration: 125,
       useNativeDriver: true,
     }).start();
-  }, [cents, width]);
+  }, [cents, windowWidth, viewLayout]);
 
-  const Target = (
+  const Target = ({ height }: { height: number }) => (
     <View
       style={{
-        backgroundColor: "rgba(0,100,0,.2)",
-        height: 100,
-        width: CROSSHAIR_SIZE,
+        backgroundColor: isGood ? "rgba(0,100,0,.9)" : "rgba(0,0,0,.2)",
+        borderRadius: height / 2,
+        height: height,
+        width: height,
       }}
     />
   );
 
-  const CrossHair = (
+  const Indicator = ({ height }: { height: number }) => (
     <Animated.View
       style={{
-        backgroundColor: "rgba(0,0,0,.6)",
-        borderColor: "rgba(0,0,0,.9)",
-        borderRadius: 50,
-        borderWidth: 1,
-        height: CROSSHAIR_SIZE,
+        backgroundColor: isGood
+          ? "rgba(0,100,0,.9)"
+          : isClose
+          ? "rgba(100,100,0,.2)"
+          : "rgba(100,0,0,.2)",
+        borderRadius: height / 2,
+        height: height,
         position: "absolute",
-        top: "50%",
+        top: 0,
         left: 0,
-        marginTop: -(CROSSHAIR_SIZE / 2),
         transform: [{ translateX: transformation }],
-        width: CROSSHAIR_SIZE,
+        width: height,
       }}
     />
   );
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    setViewLayout(event.nativeEvent.layout);
+  };
 
   return (
     <View
-      onLayout={(event) => {
-        setWidth(event.nativeEvent.layout.width);
-      }}
+      onLayout={onLayout}
       style={{
-        borderLeftColor: "black",
-        borderLeftWidth: 1,
-        borderRightColor: "black",
-        borderRightWidth: 1,
         alignItems: "center",
         position: "relative",
-        width: "90%",
+        height: "100%",
+        width: "100%",
       }}
     >
-      {Target}
-      {CrossHair}
+      {viewLayout && (
+        <>
+          <Target height={viewLayout.height} />
+          <Indicator height={viewLayout.height} />
+        </>
+      )}
     </View>
   );
 };
