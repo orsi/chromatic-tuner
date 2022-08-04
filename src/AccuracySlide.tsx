@@ -4,11 +4,10 @@ import { Animated, Easing, Text, View } from "react-native";
 const CROSSHAIR_SIZE = 32;
 
 interface AccuracySlideProps {
-  accuracy: number;
   cents: number;
 }
 
-export default ({ accuracy, cents }: AccuracySlideProps) => {
+export default ({ cents }: AccuracySlideProps) => {
   const [width, setWidth] = useState<number>(0);
   const transformation = useRef(new Animated.Value(1)).current;
 
