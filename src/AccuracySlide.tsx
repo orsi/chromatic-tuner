@@ -26,8 +26,12 @@ export default ({ cents }: AccuracySlideProps) => {
   useEffect(() => {
     let translation = 0;
     if (viewLayout) {
-      translation = (windowWidth * Math.abs((cents + 49) % 100) / 100) -
-        (viewLayout.height / 2);
+      translation = isGood
+        // if close enough, lock to center
+        ? (windowWidth / 2) -
+          (viewLayout.height / 2)
+        : (windowWidth * Math.abs((cents + 49) % 100) / 100) -
+          (viewLayout.height / 2);
     }
     Animated.timing(transformation, {
       toValue: translation,
