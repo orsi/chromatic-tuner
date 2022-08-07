@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View } from "react-native";
+import {
+  PermissionsAndroid,
+  Platform,
+  SafeAreaView,
+  Text,
+  View,
+} from "react-native";
 import Recording from "react-native-recording";
 import pitchfinder from "pitchfinder";
 import { getPitchedNote, IPitchedNote } from "./pitch.service";
-import FrequencyDisplay from "./FrequencyDisplay";
 import NoteDisplay from "./NoteDisplay";
 
 const SAMPLE_RATE = 22050;
 const BUFFER_SIZE = 2048;
 
+const getAndroidPermissions = async () => {
+  await PermissionsAndroid.requestMultiple([
+    PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+  ]);
+};
+
 const App = () => {
-  const [pitchedNote, setPitchedNote] = useState<IPitchedNote>({
-    accidental: "natural",
-    cents: 0,
-    frequency: 440,
-    note: "A",
-    octave: 4,
-  });
+  const [pitchedNote, setPitchedNote] = useState<IPitchedNote>();
   const [detectedFrequency, setDetectedFrequency] = useState<number | null>();
 
   // frequency pitch detection
@@ -36,12 +41,13 @@ const App = () => {
     }
   };
 
-  // test function
+  // diagnostic test
   const onTestRecordingData = () => {
+    const rand = Math.random();
     const sine = Math.sin(Date.now() / 100000);
     const frequency = Math.round(((sine + 1) / 2) * 5000) + 20;
     setDetectedFrequency(
-      frequency < 20 || frequency > 19000 ? null : frequency,
+      frequency < 20 || frequency > 19000 || rand < .1 ? null : frequency,
     );
 
     if (frequency) {
@@ -52,21 +58,27 @@ const App = () => {
     }
   };
 
-  // effects
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      const intervalId = setInterval(onTestRecordingData, 100);
+      // diagnostic testing
+      const intervalId = setInterval(onTestRecordingData, 50);
       return () => {
         clearInterval(intervalId);
       };
     } else {
       // setup and start Recording
+      if (Platform.OS === "android") {
+        getAndroidPermissions();
+      }
       Recording.init({
         bufferSize: BUFFER_SIZE,
         sampleRate: SAMPLE_RATE,
       });
       Recording.start();
       Recording.addRecordingEventListener(onRecordingData);
+      return () => {
+        Recording.stop();
+      };
     }
   }, []);
 
@@ -82,25 +94,30 @@ const App = () => {
     >
       <View
         style={{
-          justifyContent: "flex-start",
-        }}
-      >
-        <FrequencyDisplay frequency={detectedFrequency} />
-      </View>
-      <View
-        style={{
           justifyContent: "center",
           width: "100%",
+          height: "100%",
         }}
       >
-        <NoteDisplay
-          accidental={pitchedNote.accidental}
-          cents={pitchedNote.cents}
-          note={pitchedNote.note}
-          octave={pitchedNote.octave}
-        />
+        {pitchedNote && (
+          <NoteDisplay
+            accidental={pitchedNote.accidental}
+            cents={pitchedNote.cents}
+            note={pitchedNote.note}
+            octave={pitchedNote.octave}
+          />
+        )}
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "300",
+            marginTop: 16,
+            textAlign: "center",
+          }}
+        >
+          {detectedFrequency ? `${detectedFrequency}Hz` : ` `}
+        </Text>
       </View>
-      <View />
     </SafeAreaView>
   );
 };
