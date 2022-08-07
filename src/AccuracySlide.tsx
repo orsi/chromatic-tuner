@@ -9,7 +9,7 @@ import {
 
 const TARGET_RGBA = "rgba(0,0,0,.05)";
 const ACCURATE_CLOSE = 25;
-const GOOD_RGBA = "rgba(50, 235, 125,.5)";
+const GOOD_RGBA = "rgba(50,255,125,.6)";
 const ACCURATE_GOOD = 10;
 
 interface AccuracySlideProps {
@@ -45,7 +45,7 @@ export default ({ cents }: AccuracySlideProps) => {
   const Target = ({ height }: { height: number }) => (
     <View
       style={{
-        backgroundColor: TARGET_RGBA, //isGood ? GOOD_RGBA : TARGET_RGBA,
+        backgroundColor: TARGET_RGBA,
         borderRadius: height / 2,
         borderWidth: 1,
         height: height,
@@ -61,10 +61,10 @@ export default ({ cents }: AccuracySlideProps) => {
     return (
       <Animated.View
         style={{
-          backgroundColor: isGood ? GOOD_RGBA : `rgba(${red},${green},0, .6)`,
+          backgroundColor: isGood ? GOOD_RGBA : `rgba(${red},${green},50, .6)`,
           borderRadius: height / 2,
           borderWidth: 1,
-          borderColor: `rgba(${red},${green},0, .8)`,
+          borderColor: `rgba(${red},${green},50, .8)`,
           height: height,
           position: "absolute",
           top: 0,

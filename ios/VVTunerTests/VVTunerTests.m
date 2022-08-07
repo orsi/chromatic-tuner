@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface TonixTunerTests : XCTestCase
+@interface vvtunerTests : XCTestCase
 
 @end
 
-@implementation TonixTunerTests
+@implementation vvtunerTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

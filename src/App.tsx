@@ -28,7 +28,7 @@ const App = () => {
   const detectPitch = pitchfinder.YIN({ sampleRate: SAMPLE_RATE });
   const onRecordingData = (data: Float32Array) => {
     const frequency = detectPitch(data);
-    const roundedFrequency = frequency !== null ? Math.round(frequency) : null;
+    const roundedFrequency = frequency != null ? Math.round(frequency) : null;
     setDetectedFrequency(
       roundedFrequency,
     );
@@ -44,7 +44,7 @@ const App = () => {
   // diagnostic test
   const onTestRecordingData = () => {
     const rand = Math.random();
-    const sine = Math.sin(Date.now() / 100000);
+    const sine = Math.sin(Date.now() / 10000);
     const frequency = Math.round(((sine + 1) / 2) * 5000) + 20;
     setDetectedFrequency(
       frequency < 20 || frequency > 19000 || rand < .1 ? null : frequency,
@@ -61,7 +61,7 @@ const App = () => {
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       // diagnostic testing
-      const intervalId = setInterval(onTestRecordingData, 50);
+      const intervalId = setInterval(onTestRecordingData, 250);
       return () => {
         clearInterval(intervalId);
       };
