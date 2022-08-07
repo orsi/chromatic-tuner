@@ -7,7 +7,9 @@ import {
   View,
 } from "react-native";
 
+const TARGET_RGBA = "rgba(0,0,0,.05)";
 const ACCURATE_CLOSE = 25;
+const GOOD_RGBA = "rgba(50, 235, 125,.5)";
 const ACCURATE_GOOD = 10;
 
 interface AccuracySlideProps {
@@ -43,32 +45,36 @@ export default ({ cents }: AccuracySlideProps) => {
   const Target = ({ height }: { height: number }) => (
     <View
       style={{
-        backgroundColor: isGood ? "rgba(0,100,0,.9)" : "rgba(0,0,0,.2)",
+        backgroundColor: TARGET_RGBA, //isGood ? GOOD_RGBA : TARGET_RGBA,
         borderRadius: height / 2,
+        borderWidth: 1,
         height: height,
         width: height,
       }}
     />
   );
 
-  const Indicator = ({ height }: { height: number }) => (
-    <Animated.View
-      style={{
-        backgroundColor: isGood
-          ? "rgba(0,100,0,.9)"
-          : isClose
-          ? "rgba(100,100,0,.2)"
-          : "rgba(100,0,0,.2)",
-        borderRadius: height / 2,
-        height: height,
-        position: "absolute",
-        top: 0,
-        left: 0,
-        transform: [{ translateX: transformation }],
-        width: height,
-      }}
-    />
-  );
+  const Indicator = ({ height }: { height: number }) => {
+    const absCent = Math.abs(cents);
+    const red = Math.floor(absCent / 50 * 50) + 200;
+    const green = Math.floor((1 - (absCent / 50)) * 255);
+    return (
+      <Animated.View
+        style={{
+          backgroundColor: isGood ? GOOD_RGBA : `rgba(${red},${green},0, .6)`,
+          borderRadius: height / 2,
+          borderWidth: 1,
+          borderColor: `rgba(${red},${green},0, .8)`,
+          height: height,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          transform: [{ translateX: transformation }],
+          width: height,
+        }}
+      />
+    );
+  };
 
   const onLayout = (event: LayoutChangeEvent) => {
     setViewLayout(event.nativeEvent.layout);
