@@ -1,4 +1,4 @@
-package com.vvtuner;
+package com.orsi.jonstuner;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "vvtuner";
+    return "JonsTuner";
   }
 }

@@ -8,39 +8,54 @@ import {
 } from "react-native";
 
 const TARGET_RGBA = "rgba(0,0,0,.05)";
-const ACCURATE_CLOSE = 25;
 const GOOD_RGBA = "rgba(50,255,125,.6)";
 const ACCURATE_GOOD = 10;
 
 interface AccuracySlideProps {
-  cents: number;
+  cents?: number;
 }
 
 export default ({ cents }: AccuracySlideProps) => {
   const [viewLayout, setViewLayout] = useState<LayoutRectangle>();
-  const transformation = useRef(new Animated.Value(1)).current;
-
-  const isClose = cents > -ACCURATE_CLOSE && cents < ACCURATE_CLOSE;
-  const isGood = cents > -ACCURATE_GOOD && cents < ACCURATE_GOOD;
-
+  const fadeAnimation = useRef(new Animated.Value(1)).current;
+  const xAnimation = useRef(new Animated.Value(1)).current;
+  const yAnimation = useRef(new Animated.Value(1)).current;
+  const isGood = cents != null && cents > -ACCURATE_GOOD &&
+    cents < ACCURATE_GOOD;
   const windowWidth = Dimensions.get("window").width;
 
   useEffect(() => {
-    let translation = 0;
-    if (viewLayout) {
-      translation = isGood
-        // if close enough, lock to center
-        ? (windowWidth / 2) -
-          (viewLayout.height / 2)
-        : (windowWidth * Math.abs((cents + 49) % 100) / 100) -
-          (viewLayout.height / 2);
-    }
-    Animated.timing(transformation, {
-      toValue: translation,
+    if (viewLayout == null) return;
+
+    // fade out
+    Animated.timing(fadeAnimation, {
+      toValue: cents != null ? 1 : 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+
+    if (cents == null) return;
+
+    // if close enough, lock to center
+    const interp = isGood ? 0 : cents / 50;
+    const viewWidthAdjustment = viewLayout.height / 2;
+    // give some circularness to each axis
+    const sine = Math.sin(interp * Math.PI / 10);
+    const xValue = interp * (windowWidth / 2) + windowWidth / 2 -
+      viewWidthAdjustment;
+    const yValue = Math.abs(interp) * 25 - (sine);
+
+    Animated.timing(xAnimation, {
+      toValue: xValue,
       duration: 125,
       useNativeDriver: true,
     }).start();
-  }, [cents, windowWidth, viewLayout]);
+    Animated.timing(yAnimation, {
+      toValue: yValue,
+      duration: 125,
+      useNativeDriver: true,
+    }).start();
+  }, [cents, viewLayout]);
 
   const Target = ({ height }: { height: number }) => (
     <View
@@ -55,7 +70,7 @@ export default ({ cents }: AccuracySlideProps) => {
   );
 
   const Indicator = ({ height }: { height: number }) => {
-    const absCent = Math.abs(cents);
+    const absCent = cents != null ? Math.abs(cents) : 0;
     const red = Math.floor(absCent / 50 * 50) + 200;
     const green = Math.floor((1 - (absCent / 50)) * 255);
     return (
@@ -69,8 +84,9 @@ export default ({ cents }: AccuracySlideProps) => {
           position: "absolute",
           top: 0,
           left: 0,
-          transform: [{ translateX: transformation }],
+          transform: [{ translateX: xAnimation }, { translateY: yAnimation }],
           width: height,
+          opacity: fadeAnimation,
         }}
       />
     );

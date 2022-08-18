@@ -1,4 +1,4 @@
-# vvtuner
+# Jon's Tuner
 
 ## Installation
 

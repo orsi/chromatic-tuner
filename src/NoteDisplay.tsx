@@ -4,10 +4,10 @@ import AccuracySlide from "./AccuracySlide";
 import { TAccidental } from "./pitch.service";
 
 interface NoteDisplayProps {
-  accidental: TAccidental;
-  cents: number;
-  note: string;
-  octave: number;
+  accidental?: TAccidental;
+  cents?: number;
+  note?: string;
+  octave?: number;
 }
 
 export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
@@ -32,11 +32,10 @@ export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
         <View
           style={{
             position: "relative",
-            width: 96,
           }}
         >
           <Text style={{ fontSize: 96, textAlign: "center" }}>
-            {note}
+            {note ?? " "}
           </Text>
           <Text
             style={{
@@ -47,7 +46,7 @@ export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
               right: 0,
             }}
           >
-            {accidental === "sharp" ? `♯` : accidental === "flat" ? `♭` : ``}
+            {accidental === "sharp" ? `♯` : accidental === "flat" ? `♭` : ` `}
           </Text>
           <Text
             style={{
@@ -58,15 +57,15 @@ export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
               right: 0,
             }}
           >
-            {octave}
+            {octave ?? " "}
           </Text>
         </View>
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 10 }}>
-            cents
+            {cents ? "cents" : " "}
           </Text>
           <Text style={{ fontSize: 16 }}>
-            {cents}
+            {cents ?? " "}
           </Text>
         </View>
       </View>

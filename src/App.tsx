@@ -21,7 +21,7 @@ const getAndroidPermissions = async () => {
 };
 
 const App = () => {
-  const [pitchedNote, setPitchedNote] = useState<IPitchedNote>();
+  const [pitchedNote, setPitchedNote] = useState<IPitchedNote | null>();
   const [detectedFrequency, setDetectedFrequency] = useState<number | null>();
 
   // frequency pitch detection
@@ -38,6 +38,8 @@ const App = () => {
       if (frequencyNote) {
         setPitchedNote(frequencyNote);
       }
+    } else {
+      setPitchedNote(null);
     }
   };
 
@@ -45,7 +47,7 @@ const App = () => {
   const onTestRecordingData = () => {
     const rand = Math.random();
     const sine = Math.sin(Date.now() / 10000);
-    const frequency = Math.round(((sine + 1) / 2) * 5000) + 20;
+    const frequency = Math.round(((sine + 1) / 2) * 2000) + 2000;
     setDetectedFrequency(
       frequency < 20 || frequency > 19000 || rand < .1 ? null : frequency,
     );
@@ -55,6 +57,8 @@ const App = () => {
       if (frequencyNote) {
         setPitchedNote(frequencyNote);
       }
+    } else {
+      setPitchedNote(null);
     }
   };
 
@@ -99,14 +103,12 @@ const App = () => {
           height: "100%",
         }}
       >
-        {pitchedNote && (
-          <NoteDisplay
-            accidental={pitchedNote.accidental}
-            cents={pitchedNote.cents}
-            note={pitchedNote.note}
-            octave={pitchedNote.octave}
-          />
-        )}
+        <NoteDisplay
+          accidental={pitchedNote?.accidental}
+          cents={pitchedNote?.cents}
+          note={pitchedNote?.note}
+          octave={pitchedNote?.octave}
+        />
         <Text
           style={{
             fontSize: 16,

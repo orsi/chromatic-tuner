@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "vvtuner.app"
-               BlueprintName = "vvtuner"
-               ReferencedContainer = "container:vvtuner.xcodeproj">
+               BuildableName = "JonsTuner.app"
+               BlueprintName = "JonsTuner"
+               ReferencedContainer = "container:JonsTuner.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "vvtunerTests.xctest"
-               BlueprintName = "vvtunerTests"
-               ReferencedContainer = "container:vvtuner.xcodeproj">
+               BuildableName = "JonsTunerTests.xctest"
+               BlueprintName = "JonsTunerTests"
+               ReferencedContainer = "container:JonsTuner.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "vvtuner.app"
-            BlueprintName = "vvtuner"
-            ReferencedContainer = "container:vvtuner.xcodeproj">
+            BuildableName = "JonsTuner.app"
+            BlueprintName = "JonsTuner"
+            ReferencedContainer = "container:JonsTuner.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "vvtuner.app"
-            BlueprintName = "vvtuner"
-            ReferencedContainer = "container:vvtuner.xcodeproj">
+            BuildableName = "JonsTuner.app"
+            BlueprintName = "JonsTuner"
+            ReferencedContainer = "container:JonsTuner.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
