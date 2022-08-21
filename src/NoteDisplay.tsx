@@ -1,16 +1,13 @@
 import React from "react";
 import { Text, View } from "react-native";
 import AccuracySlide from "./AccuracySlide";
-import { TAccidental } from "./pitch.service";
+import { IPitchedNote, TAccidental } from "./pitch.service";
 
 interface NoteDisplayProps {
-  accidental?: TAccidental;
-  cents?: number;
-  note?: string;
-  octave?: number;
+  currentNote?: IPitchedNote | null;
 }
 
-export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
+export default ({ currentNote }: NoteDisplayProps) => {
   return (
     <View>
       <View
@@ -20,7 +17,7 @@ export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
           height: "100%",
         }}
       >
-        <AccuracySlide cents={cents} />
+        <AccuracySlide cents={currentNote?.cents} />
       </View>
       <View
         style={{
@@ -35,7 +32,7 @@ export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
           }}
         >
           <Text style={{ fontSize: 96, textAlign: "center" }}>
-            {note ?? " "}
+            {currentNote?.note ?? " "}
           </Text>
           <Text
             style={{
@@ -46,7 +43,11 @@ export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
               right: 0,
             }}
           >
-            {accidental === "sharp" ? `♯` : accidental === "flat" ? `♭` : ` `}
+            {currentNote?.accidental === "sharp"
+              ? `♯`
+              : currentNote?.accidental === "flat"
+              ? `♭`
+              : ` `}
           </Text>
           <Text
             style={{
@@ -57,15 +58,15 @@ export default ({ accidental, cents, note, octave }: NoteDisplayProps) => {
               right: 0,
             }}
           >
-            {octave ?? " "}
+            {currentNote?.octave ?? " "}
           </Text>
         </View>
         <View style={{ alignItems: "center" }}>
           <Text style={{ fontSize: 10 }}>
-            {cents ? "cents" : " "}
+            {currentNote?.cents ? "cents" : " "}
           </Text>
           <Text style={{ fontSize: 16 }}>
-            {cents ?? " "}
+            {currentNote?.cents ?? " "}
           </Text>
         </View>
       </View>

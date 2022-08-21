@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 const TARGET_RGBA = "rgba(0,0,0,.05)";
-const GOOD_RGBA = "rgba(50,255,125,.6)";
+const GOOD_RGBA = "rgba(0,255,125,.6)";
 const ACCURATE_GOOD = 10;
 
 interface AccuracySlideProps {
@@ -39,11 +39,9 @@ export default ({ cents }: AccuracySlideProps) => {
     // if close enough, lock to center
     const interp = isGood ? 0 : cents / 50;
     const viewWidthAdjustment = viewLayout.height / 2;
-    // give some circularness to each axis
-    const sine = Math.sin(interp * Math.PI / 10);
     const xValue = interp * (windowWidth / 2) + windowWidth / 2 -
       viewWidthAdjustment;
-    const yValue = Math.abs(interp) * 25 - (sine);
+    const yValue = Math.abs(interp) * 25;
 
     Animated.timing(xAnimation, {
       toValue: xValue,

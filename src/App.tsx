@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   PermissionsAndroid,
   Platform,
@@ -11,8 +11,9 @@ import pitchfinder from "pitchfinder";
 import { getPitchedNote, IPitchedNote } from "./pitch.service";
 import NoteDisplay from "./NoteDisplay";
 
-const SAMPLE_RATE = 22050;
-const BUFFER_SIZE = 2048;
+const SAMPLE_RATE = 11025;
+const BUFFER_SIZE = 256;
+const UPDATE_FPS = 60;
 
 const getAndroidPermissions = async () => {
   await PermissionsAndroid.requestMultiple([
@@ -21,69 +22,51 @@ const getAndroidPermissions = async () => {
 };
 
 const App = () => {
-  const [pitchedNote, setPitchedNote] = useState<IPitchedNote | null>();
+  const lastUpdate = useRef<number>(Date.now());
+  const frequency = useRef<number | null>(null);
   const [detectedFrequency, setDetectedFrequency] = useState<number | null>();
+  const [currentNote, setCurrentNote] = useState<IPitchedNote | null>();
 
   // frequency pitch detection
   const detectPitch = pitchfinder.YIN({ sampleRate: SAMPLE_RATE });
   const onRecordingData = (data: Float32Array) => {
-    const frequency = detectPitch(data);
-    const roundedFrequency = frequency != null ? Math.round(frequency) : null;
-    setDetectedFrequency(
-      roundedFrequency,
-    );
+    const now = Date.now();
+    const delta = now - lastUpdate.current;
 
-    if (roundedFrequency) {
-      const frequencyNote = getPitchedNote(roundedFrequency);
-      if (frequencyNote) {
-        setPitchedNote(frequencyNote);
+    // we save the frequency into a ref in order to prevent
+    // react from rerendering on every frequency detection
+    const pitch = detectPitch(data);
+    const roundedPitch = pitch != null ? Math.round(pitch) : null;
+    frequency.current = roundedPitch;
+
+    // only update state variable at a minimal interval in order
+    // to limit React rerenders
+    if (delta > 1000 / UPDATE_FPS) {
+      if (roundedPitch != null) {
+        const pitchedNote = getPitchedNote(roundedPitch);
+        if (pitchedNote) {
+          setDetectedFrequency(roundedPitch);
+          setCurrentNote(pitchedNote);
+        }
       }
-    } else {
-      setPitchedNote(null);
-    }
-  };
-
-  // diagnostic test
-  const onTestRecordingData = () => {
-    const rand = Math.random();
-    const sine = Math.sin(Date.now() / 10000);
-    const frequency = Math.round(((sine + 1) / 2) * 2000) + 2000;
-    setDetectedFrequency(
-      frequency < 20 || frequency > 19000 || rand < .1 ? null : frequency,
-    );
-
-    if (frequency) {
-      const frequencyNote = getPitchedNote(frequency);
-      if (frequencyNote) {
-        setPitchedNote(frequencyNote);
-      }
-    } else {
-      setPitchedNote(null);
+      lastUpdate.current = now;
     }
   };
 
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      // diagnostic testing
-      const intervalId = setInterval(onTestRecordingData, 250);
-      return () => {
-        clearInterval(intervalId);
-      };
-    } else {
-      // setup and start Recording
-      if (Platform.OS === "android") {
-        getAndroidPermissions();
-      }
-      Recording.init({
-        bufferSize: BUFFER_SIZE,
-        sampleRate: SAMPLE_RATE,
-      });
-      Recording.start();
-      Recording.addRecordingEventListener(onRecordingData);
-      return () => {
-        Recording.stop();
-      };
+    // setup and start Recording
+    if (Platform.OS === "android") {
+      getAndroidPermissions();
     }
+    Recording.init({
+      bufferSize: BUFFER_SIZE,
+      sampleRate: SAMPLE_RATE,
+    });
+    Recording.start();
+    Recording.addRecordingEventListener(onRecordingData);
+    return () => {
+      Recording.stop();
+    };
   }, []);
 
   return (
@@ -103,12 +86,7 @@ const App = () => {
           height: "100%",
         }}
       >
-        <NoteDisplay
-          accidental={pitchedNote?.accidental}
-          cents={pitchedNote?.cents}
-          note={pitchedNote?.note}
-          octave={pitchedNote?.octave}
-        />
+        <NoteDisplay currentNote={currentNote} />
         <Text
           style={{
             fontSize: 16,
