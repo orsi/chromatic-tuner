@@ -17,7 +17,6 @@ interface AccuracySlideProps {
 
 export default ({ cents }: AccuracySlideProps) => {
   const [viewLayout, setViewLayout] = useState<LayoutRectangle>();
-  const fadeAnimation = useRef(new Animated.Value(1)).current;
   const xAnimation = useRef(new Animated.Value(1)).current;
   const yAnimation = useRef(new Animated.Value(1)).current;
   const isGood = cents != null && cents > -ACCURATE_GOOD &&
@@ -26,14 +25,6 @@ export default ({ cents }: AccuracySlideProps) => {
 
   useEffect(() => {
     if (viewLayout == null) return;
-
-    // fade out
-    Animated.timing(fadeAnimation, {
-      toValue: cents != null ? 1 : 0,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-
     if (cents == null) return;
 
     // if close enough, lock to center
@@ -45,12 +36,12 @@ export default ({ cents }: AccuracySlideProps) => {
 
     Animated.timing(xAnimation, {
       toValue: xValue,
-      duration: 125,
+      duration: 250,
       useNativeDriver: true,
     }).start();
     Animated.timing(yAnimation, {
       toValue: yValue,
-      duration: 125,
+      duration: 250,
       useNativeDriver: true,
     }).start();
   }, [cents, viewLayout]);
@@ -84,7 +75,6 @@ export default ({ cents }: AccuracySlideProps) => {
           left: 0,
           transform: [{ translateX: xAnimation }, { translateY: yAnimation }],
           width: height,
-          opacity: fadeAnimation,
         }}
       />
     );

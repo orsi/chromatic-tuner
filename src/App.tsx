@@ -11,9 +11,8 @@ import pitchfinder from "pitchfinder";
 import { getPitchedNote, IPitchedNote } from "./pitch.service";
 import NoteDisplay from "./NoteDisplay";
 
-const SAMPLE_RATE = 11025;
-const BUFFER_SIZE = 256;
-const UPDATE_FPS = 60;
+const SAMPLE_RATE = 22050;
+const BUFFER_SIZE = 2056;
 
 const getAndroidPermissions = async () => {
   await PermissionsAndroid.requestMultiple([
@@ -22,34 +21,22 @@ const getAndroidPermissions = async () => {
 };
 
 const App = () => {
-  const lastUpdate = useRef<number>(Date.now());
-  const frequency = useRef<number | null>(null);
+  const frequency = useRef<number | null>();
+  const note = useRef<IPitchedNote | null>();
   const [detectedFrequency, setDetectedFrequency] = useState<number | null>();
   const [currentNote, setCurrentNote] = useState<IPitchedNote | null>();
 
   // frequency pitch detection
   const detectPitch = pitchfinder.YIN({ sampleRate: SAMPLE_RATE });
   const onRecordingData = (data: Float32Array) => {
-    const now = Date.now();
-    const delta = now - lastUpdate.current;
-
     // we save the frequency into a ref in order to prevent
     // react from rerendering on every frequency detection
     const pitch = detectPitch(data);
-    const roundedPitch = pitch != null ? Math.round(pitch) : null;
-    frequency.current = roundedPitch;
-
-    // only update state variable at a minimal interval in order
-    // to limit React rerenders
-    if (delta > 1000 / UPDATE_FPS) {
-      if (roundedPitch != null) {
-        const pitchedNote = getPitchedNote(roundedPitch);
-        if (pitchedNote) {
-          setDetectedFrequency(roundedPitch);
-          setCurrentNote(pitchedNote);
-        }
-      }
-      lastUpdate.current = now;
+    frequency.current = pitch;
+    if (frequency.current != null && pitch != null) {
+      note.current = getPitchedNote(frequency.current);
+      setCurrentNote(note.current);
+      setDetectedFrequency(Math.round(pitch));
     }
   };
 
