@@ -33,10 +33,10 @@ const App = () => {
     // react from rerendering on every frequency detection
     const pitch = detectPitch(data);
     frequency.current = pitch;
-    if (frequency.current != null && pitch != null) {
+    if (frequency.current != null) {
       note.current = getPitchedNote(frequency.current);
       setCurrentNote(note.current);
-      setDetectedFrequency(Math.round(pitch));
+      setDetectedFrequency(Math.round(frequency.current));
     }
   };
 
