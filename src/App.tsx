@@ -11,8 +11,8 @@ import pitchfinder from "pitchfinder";
 import { getPitchedNote, IPitchedNote } from "./pitch.service";
 import NoteDisplay from "./NoteDisplay";
 
-const SAMPLE_RATE = 22050;
-const BUFFER_SIZE = 2056;
+const SAMPLE_RATE = 44100;
+const BUFFER_SIZE = 8192;
 
 const getAndroidPermissions = async () => {
   await PermissionsAndroid.requestMultiple([
