@@ -6,6 +6,7 @@ import {
   Platform,
   SafeAreaView,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import Recording from "react-native-recording";
@@ -44,8 +45,21 @@ const App = () => {
   const [isPortraitMode, setIsPortraitMode] = useState(
     windowWidth < windowHeight,
   );
-  const [currentNote, setCurrentNote] = useState<IPitchedNote>(DEFAULT_NOTE);
+  const [currentFrequency, setCurrentFrequency] = useState<number>(
+    DEFAULT_NOTE.frequency,
+  );
+  const [accidentalMode, setAccidentalMode] = useState(ACCIDENTAL_MODE.SHARP);
+  const currentNote = getPitchedNote(currentFrequency, accidentalMode);
 
+  const onPressAccidentalToggleButton = () => {
+    setAccidentalMode(
+      accidentalMode !== ACCIDENTAL_MODE.SHARP
+        ? ACCIDENTAL_MODE.SHARP
+        : ACCIDENTAL_MODE.FLAT,
+    );
+  };
+
+  // derived state
   const isGood = currentNote.cents != null &&
     currentNote.cents > -ACCURACY_GOOD &&
     currentNote.cents < ACCURACY_GOOD;
@@ -68,10 +82,7 @@ const App = () => {
       const pitch = PitchFinder(data);
       frequency.current = pitch;
       if (frequency.current != null) {
-        note.current = getPitchedNote(frequency.current);
-        if (note.current) {
-          setCurrentNote(note.current);
-        }
+        setCurrentFrequency(frequency.current);
       }
     };
     Recording.init({
@@ -136,6 +147,42 @@ const App = () => {
         height: "100%",
       }}
     >
+      {/* Sharp or flat toggle */}
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          marginTop: isPortraitMode ? 64 : 32,
+          marginRight: isPortraitMode ? 32 : 64,
+        }}
+      >
+        <TouchableOpacity
+          onPress={onPressAccidentalToggleButton}
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#DDDDDD",
+            borderRadius: 45,
+            width: 45,
+            height: 45,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 32,
+              fontWeight: "300",
+              textAlign: "center",
+              color: "rgba(0,0,0,.5)",
+              paddingTop: 5,
+            }}
+          >
+            {accidentalMode === ACCIDENTAL_MODE.SHARP ? "♭" : "♯"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Current detected frequency */}
       <Text
         style={{
           fontSize: 16,
@@ -146,7 +193,7 @@ const App = () => {
           bottom: 32,
         }}
       >
-        {Math.round(currentNote.frequency)}Hz
+        {Math.round(currentFrequency)}Hz
       </Text>
 
       {/* Target */}
