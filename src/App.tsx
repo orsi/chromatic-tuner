@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -7,15 +7,17 @@ import {
   Platform,
   SafeAreaView,
   Text,
+  TextProps,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import Recording from "react-native-recording";
 import pitchfinder from "pitchfinder";
 import { ACCIDENTAL_MODE, getPitchedNote, IPitchedNote } from "./pitch.service";
 
-const DONATION_LINK =
-  `https://www.paypal.com/donate/?business=VEECFWLFK3QCQ&no_recurring=0&item_name=for+creating+apps+that+work+without+a+million+ads.&currency_code=CAD`;
+const ACCURACY_GOOD = 10;
+const BUFFER_SIZE = 4096;
 const DEFAULT_NOTE: IPitchedNote = {
   accidental: "natural",
   cents: 0,
@@ -23,12 +25,17 @@ const DEFAULT_NOTE: IPitchedNote = {
   note: "A",
   octave: 4,
 };
-const TARGET_SIZE = 200;
-const TARGET_RGBA = "rgba(0,0,0,.15)";
+const DONATION_LINK =
+  `https://www.paypal.com/donate/?business=VEECFWLFK3QCQ&no_recurring=0&item_name=for+creating+apps+that+work+without+a+million+ads.&currency_code=CAD`;
 const GOOD_RGBA = "rgba(0,255,125,.6)";
-const ACCURACY_GOOD = 10;
 const SAMPLE_RATE = 22050;
-const BUFFER_SIZE = 4096;
+const TARGET_BG_COLOR = "rgba(20,20,20)";
+const TARGET_BG_COLOR_DARK = "rgba(255,255,255,.2)";
+const TARGET_SIZE = 200;
+const BG_COLOR = "rgb(240,240,240)";
+const BG_COLOR_DARK = "rgb(20,20,20)";
+const TEXT_COLOR = "rgb(0,0,0)";
+const TEXT_COLOR_DARK = "rgb(240,240,240)";
 const PitchFinder = pitchfinder.YIN({ sampleRate: SAMPLE_RATE });
 
 const getAndroidPermissions = async () => {
@@ -37,7 +44,24 @@ const getAndroidPermissions = async () => {
   ]);
 };
 
+const ThemedText: React.FC<TextProps> = (
+  { children, style, ...attributes },
+) => {
+  const scheme = useColorScheme();
+  return (
+    <Text
+      style={[{
+        color: scheme === "dark" ? TEXT_COLOR_DARK : TEXT_COLOR,
+      }, style]}
+      {...attributes}
+    >
+      {children}
+    </Text>
+  );
+};
+
 const App = () => {
+  const scheme = useColorScheme();
   const frequency = useRef<number | null>();
   const xAnimation = useRef(new Animated.Value(0)).current;
   const yAnimation = useRef(new Animated.Value(0)).current;
@@ -152,15 +176,15 @@ const App = () => {
   return (
     <SafeAreaView
       style={{
-        justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "white",
-        width: "100%",
+        backgroundColor: scheme === "dark" ? BG_COLOR_DARK : BG_COLOR,
         height: "100%",
+        justifyContent: "center",
+        width: "100%",
       }}
     >
       {/* Current detected frequency */}
-      <Text
+      <ThemedText
         style={{
           fontSize: 16,
           fontWeight: "300",
@@ -171,10 +195,10 @@ const App = () => {
         }}
       >
         {Math.round(currentFrequency)}Hz
-      </Text>
+      </ThemedText>
 
       {/* Paypal donation link */}
-      <Text
+      <ThemedText
         onPress={onPressDonateLink}
         style={{
           bottom: 0,
@@ -186,7 +210,7 @@ const App = () => {
         }}
       >
         💲
-      </Text>
+      </ThemedText>
 
       {/* Target */}
       <View
@@ -194,7 +218,9 @@ const App = () => {
           alignItems: "center",
           justifyContent: "center",
           position: "absolute",
-          backgroundColor: TARGET_RGBA,
+          backgroundColor: scheme === "dark"
+            ? TARGET_BG_COLOR_DARK
+            : TARGET_BG_COLOR,
           borderRadius: TARGET_SIZE,
           height: TARGET_SIZE,
           width: TARGET_SIZE,
@@ -222,9 +248,9 @@ const App = () => {
         <View style={{ flexDirection: "row" }}>
           <View style={{ width: 64 }}>
             {/* Note letter */}
-            <Text style={{ fontSize: 96, textAlign: "right" }}>
+            <ThemedText style={{ fontSize: 96, textAlign: "right" }}>
               {currentNote.note}
-            </Text>
+            </ThemedText>
           </View>
           <View style={{ justifyContent: "space-between" }}>
             {/* Sharp/flat accidental symbol and toggle */}
@@ -241,10 +267,9 @@ const App = () => {
                 height: 24,
               }}
             >
-              <Text
+              <ThemedText
                 style={{
                   fontSize: 24,
-                  color: "rgba(0,0,0,.7)",
                   textAlign: "center",
                 }}
               >
@@ -253,11 +278,11 @@ const App = () => {
                   : currentNote.accidental === "flat"
                   ? `♭`
                   : ` `}
-              </Text>
+              </ThemedText>
             </TouchableOpacity>
 
             {/* Octave */}
-            <Text
+            <ThemedText
               style={{
                 fontSize: 24,
                 fontWeight: "300",
@@ -267,17 +292,17 @@ const App = () => {
               }}
             >
               {currentNote.octave}
-            </Text>
+            </ThemedText>
           </View>
         </View>
 
         {/* Cents */}
-        <Text style={{ fontSize: 10 }}>
+        <ThemedText style={{ fontSize: 10 }}>
           cents
-        </Text>
-        <Text style={{ fontSize: 16 }}>
+        </ThemedText>
+        <ThemedText style={{ fontSize: 16 }}>
           {currentNote.cents}
-        </Text>
+        </ThemedText>
       </View>
     </SafeAreaView>
   );
