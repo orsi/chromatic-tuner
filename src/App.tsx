@@ -29,7 +29,7 @@ const DONATION_LINK =
   `https://www.paypal.com/donate/?business=VEECFWLFK3QCQ&no_recurring=0&item_name=for+creating+apps+that+work+without+a+million+ads.&currency_code=CAD`;
 const GOOD_RGBA = "rgba(0,255,125,.6)";
 const SAMPLE_RATE = 22050;
-const TARGET_BG_COLOR = "rgba(20,20,20)";
+const TARGET_BG_COLOR = "rgb(200,200,200)";
 const TARGET_BG_COLOR_DARK = "rgba(255,255,255,.2)";
 const TARGET_SIZE = 200;
 const BG_COLOR = "rgb(240,240,240)";
