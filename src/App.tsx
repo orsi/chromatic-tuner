@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
+  Linking,
   PermissionsAndroid,
   Platform,
   SafeAreaView,
@@ -13,6 +14,8 @@ import Recording from "react-native-recording";
 import pitchfinder from "pitchfinder";
 import { ACCIDENTAL_MODE, getPitchedNote, IPitchedNote } from "./pitch.service";
 
+const DONATION_LINK =
+  `https://www.paypal.com/donate/?business=VEECFWLFK3QCQ&no_recurring=0&item_name=for+creating+apps+that+work+without+a+million+ads.&currency_code=CAD`;
 const DEFAULT_NOTE: IPitchedNote = {
   accidental: "natural",
   cents: 0,
@@ -71,6 +74,17 @@ const App = () => {
         ? ACCIDENTAL_MODE.SHARP
         : ACCIDENTAL_MODE.FLAT,
     );
+  };
+
+  const onPressDonateLink = async () => {
+    // Checking if the link is supported for links with custom URL scheme.
+    const supported = await Linking.canOpenURL(DONATION_LINK);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(DONATION_LINK);
+    }
   };
 
   const onRecordingData = (data: Float32Array) => {
@@ -150,13 +164,28 @@ const App = () => {
         style={{
           fontSize: 16,
           fontWeight: "300",
-          marginTop: 16,
           textAlign: "center",
           position: "absolute",
-          bottom: 32,
+          bottom: 0,
+          padding: 32,
         }}
       >
         {Math.round(currentFrequency)}Hz
+      </Text>
+
+      {/* Paypal donation link */}
+      <Text
+        onPress={onPressDonateLink}
+        style={{
+          bottom: 0,
+          fontSize: 12,
+          textAlign: "right",
+          position: "absolute",
+          right: 0,
+          padding: 32,
+        }}
+      >
+        💲
       </Text>
 
       {/* Target */}
