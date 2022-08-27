@@ -26,7 +26,7 @@ const DEFAULT_NOTE: IPitchedNote = {
   octave: 4,
 };
 const DONATION_LINK =
-  `https://www.paypal.com/donate/?business=VEECFWLFK3QCQ&no_recurring=0&item_name=for+creating+apps+that+work+without+a+million+ads.&currency_code=CAD`;
+  `https://www.paypal.com/donate/?business=VEECFWLFK3QCQ&amount=1&no_recurring=0&item_name=a+cup+of+coffee+or+snack%21&currency_code=CAD`;
 const GOOD_RGBA = "rgba(0,255,125,.6)";
 const SAMPLE_RATE = 22050;
 const TARGET_BG_COLOR = "rgb(200,200,200)";
