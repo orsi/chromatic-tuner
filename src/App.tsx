@@ -268,9 +268,9 @@ const App = () => {
                   ? "rgba(0,0,0,.1)"
                   : "transparent",
                 borderRadius: 32,
-                paddingBottom: 8,
+                paddingBottom: Platform.OS === "ios" ? 0 : 8,
                 paddingTop: 0,
-                paddingHorizontal: 4
+                paddingHorizontal: 4,
               }}
             >
               <ThemedText

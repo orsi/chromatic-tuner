@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* JonsTunerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* JonsTunerTests.m */; };
-		104C2B8D28BA851C00B41B5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 104C2B8C28BA851C00B41B5F /* Assets.xcassets */; };
+		104C2B8D28BA851C00B41B5F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 104C2B8C28BA851C00B41B5F /* Images.xcassets */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		6172F2D35A4C3AA820D92908 /* libPods-JonsTuner.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6423831EA8574132BED9D8CC /* libPods-JonsTuner.a */; };
@@ -30,7 +30,7 @@
 		00E356EE1AD99517003FC87E /* JonsTunerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JonsTunerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* JonsTunerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JonsTunerTests.m; sourceTree = "<group>"; };
-		104C2B8C28BA851C00B41B5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = JonsTuner/Assets.xcassets; sourceTree = "<group>"; };
+		104C2B8C28BA851C00B41B5F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = JonsTuner/Images.xcassets; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* JonsTuner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JonsTuner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = JonsTuner/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = JonsTuner/AppDelegate.m; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		13B07FAE1A68108700A75B9A /* JonsTuner */ = {
 			isa = PBXGroup;
 			children = (
-				104C2B8C28BA851C00B41B5F /* Assets.xcassets */,
+				104C2B8C28BA851C00B41B5F /* Images.xcassets */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -242,7 +242,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				104C2B8D28BA851C00B41B5F /* Assets.xcassets in Resources */,
+				104C2B8D28BA851C00B41B5F /* Images.xcassets in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
