@@ -198,19 +198,24 @@ const App = () => {
       </ThemedText>
 
       {/* Paypal donation link */}
-      <ThemedText
+      <TouchableOpacity
         onPress={onPressDonateLink}
         style={{
           bottom: 0,
-          fontSize: 12,
-          textAlign: "right",
           position: "absolute",
           right: 0,
           padding: 32,
         }}
       >
-        💲
-      </ThemedText>
+        <ThemedText
+          style={{
+            fontSize: 12,
+            textAlign: "right",
+          }}
+        >
+          💲
+        </ThemedText>
+      </TouchableOpacity>
 
       {/* Target */}
       <View
@@ -263,8 +268,9 @@ const App = () => {
                   ? "rgba(0,0,0,.1)"
                   : "transparent",
                 borderRadius: 32,
-                width: 24,
-                height: 24,
+                paddingBottom: 8,
+                paddingTop: 0,
+                paddingHorizontal: 4
               }}
             >
               <ThemedText
@@ -286,9 +292,6 @@ const App = () => {
               style={{
                 fontSize: 24,
                 fontWeight: "300",
-                height: 24,
-                textAlign: "center",
-                width: 24,
               }}
             >
               {currentNote.octave}
