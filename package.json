@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "pitchfinder": "^2.3.1",
-    "react": "17.0.2",
-    "react-native": "0.68.0",
+    "react": "18.0.0",
+    "react-native": "0.69.0",
     "react-native-recording": "^0.5.1"
   },
   "devDependencies": {
