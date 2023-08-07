@@ -3,6 +3,7 @@ import {
   Animated,
   Dimensions,
   Linking,
+  NativeModules,
   PermissionsAndroid,
   Platform,
   SafeAreaView,
@@ -12,9 +13,13 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import Recording from 'react-native-recording';
+// import Recording from 'react-native-recording';
 import pitchfinder from 'pitchfinder';
 import {ACCIDENTAL_MODE, getPitchedNote, IPitchedNote} from './pitch.service';
+
+const {AudioStream} = NativeModules;
+console.log('hi', AudioStream);
+AudioStream.start();
 
 const ACCURACY_GOOD = 10;
 const BUFFER_SIZE = 4096;
@@ -128,12 +133,12 @@ function App(): JSX.Element {
     }
 
     // setup and start Recording
-    Recording.init({
-      bufferSize: BUFFER_SIZE,
-      sampleRate: SAMPLE_RATE,
-    });
-    Recording.start();
-    Recording.addRecordingEventListener(onRecordingData);
+    // Recording.init({
+    //   bufferSize: BUFFER_SIZE,
+    //   sampleRate: SAMPLE_RATE,
+    // });
+    // Recording.start();
+    // Recording.addRecordingEventListener(onRecordingData);
 
     // determine orientation
     const dimensionsChange = Dimensions.addEventListener(
@@ -142,7 +147,7 @@ function App(): JSX.Element {
     );
 
     return () => {
-      Recording.stop();
+      // Recording.stop();
       dimensionsChange.remove();
     };
   }, []);
