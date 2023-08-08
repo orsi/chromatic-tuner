@@ -1,4 +1,4 @@
-package com.orsi.jonstuner.jonstuner;
+package com.orsi.jonstuner;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

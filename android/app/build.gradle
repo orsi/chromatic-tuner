@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.orsi.jonstuner.jonstuner"
+    namespace "com.orsi.jonstuner"
     defaultConfig {
-        applicationId "com.orsi.jonstuner.jonstuner"
+        applicationId "com.orsi.jonstuner"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

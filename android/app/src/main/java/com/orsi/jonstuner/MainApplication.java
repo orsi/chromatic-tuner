@@ -1,4 +1,4 @@
-package com.orsi.jonstuner.jonstuner;
+package com.orsi.jonstuner;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
