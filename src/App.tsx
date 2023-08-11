@@ -3,7 +3,6 @@ import {
   Animated,
   Dimensions,
   Linking,
-  NativeModules,
   PermissionsAndroid,
   Platform,
   SafeAreaView,
@@ -13,16 +12,14 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-// import Recording from 'react-native-recording';
+import AudioStreamModule from './AudioStreamModule';
 import pitchfinder from 'pitchfinder';
 import {ACCIDENTAL_MODE, getPitchedNote, IPitchedNote} from './pitch.service';
 
-const {AudioStream} = NativeModules;
-console.log('hi', AudioStream);
-AudioStream.start();
-
 const ACCURACY_GOOD = 10;
 const BUFFER_SIZE = 4096;
+const SAMPLE_RATE = 48000;
+const UPDATE_FRAME_RATE = 1000 / 60;
 const DEFAULT_NOTE: IPitchedNote = {
   accidental: 'natural',
   cents: 0,
@@ -32,7 +29,6 @@ const DEFAULT_NOTE: IPitchedNote = {
 };
 const DONATION_LINK = `https://www.paypal.com/donate/?business=VEECFWLFK3QCQ&amount=1&no_recurring=0&item_name=a+cup+of+coffee+or+snack%21&currency_code=CAD`;
 const GOOD_RGBA = 'rgba(0,255,125,.6)';
-const SAMPLE_RATE = 22050;
 const TARGET_BG_COLOR = 'rgb(200,200,200)';
 const TARGET_BG_COLOR_DARK = 'rgba(255,255,255,.2)';
 const TARGET_SIZE = 200;
@@ -121,24 +117,37 @@ function App(): JSX.Element {
     // react from rerendering on every frequency detection
     const pitch = PitchFinder(data);
     frequency.current = pitch;
-    if (frequency.current != null) {
-      setCurrentFrequency(frequency.current);
-    }
   };
 
+  const rafRef = useRef(0);
+  const lastUpdateRef = useRef(0);
   useEffect(() => {
+    const update = (time: number) => {
+      const delta = time - lastUpdateRef.current;
+      if (delta > UPDATE_FRAME_RATE) {
+        if (frequency.current != null && frequency.current < 10000) {
+          setCurrentFrequency(frequency.current);
+        }
+        lastUpdateRef.current = time;
+      }
+      rafRef.current = requestAnimationFrame(update);
+    };
+    rafRef.current = requestAnimationFrame(update);
+
     // android permissions
     if (Platform.OS === 'android') {
       getAndroidPermissions();
     }
 
     // setup and start Recording
-    // Recording.init({
-    //   bufferSize: BUFFER_SIZE,
-    //   sampleRate: SAMPLE_RATE,
-    // });
-    // Recording.start();
-    // Recording.addRecordingEventListener(onRecordingData);
+    AudioStreamModule.setup(
+      {
+        bufferSize: BUFFER_SIZE,
+        sampleRate: SAMPLE_RATE,
+      },
+      onRecordingData,
+    );
+    AudioStreamModule.start();
 
     // determine orientation
     const dimensionsChange = Dimensions.addEventListener(
@@ -147,7 +156,8 @@ function App(): JSX.Element {
     );
 
     return () => {
-      // Recording.stop();
+      cancelAnimationFrame(rafRef.current);
+      AudioStreamModule.stop();
       dimensionsChange.remove();
     };
   }, []);
