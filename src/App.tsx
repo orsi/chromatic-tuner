@@ -113,6 +113,7 @@ function App(): JSX.Element {
   };
 
   const onRecordingData = (data: Float32Array) => {
+    console.log('js', data);
     // we save the frequency into a ref in order to prevent
     // react from rerendering on every frequency detection
     const pitch = PitchFinder(data);
