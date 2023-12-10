@@ -18,7 +18,7 @@ import {ACCIDENTAL_MODE, getPitchedNote, IPitchedNote} from './pitch.service';
 
 const ACCURACY_GOOD = 10;
 const BUFFER_SIZE = 4096;
-const SAMPLE_RATE = 48000;
+const SAMPLE_RATE = 44100;
 const UPDATE_FRAME_RATE = 1000 / 60;
 const DEFAULT_NOTE: IPitchedNote = {
   accidental: 'natural',
@@ -37,12 +37,6 @@ const BG_COLOR_DARK = 'rgb(20,20,20)';
 const TEXT_COLOR = 'rgb(0,0,0)';
 const TEXT_COLOR_DARK = 'rgb(240,240,240)';
 const PitchFinder = pitchfinder.YIN({sampleRate: SAMPLE_RATE});
-
-const getAndroidPermissions = async () => {
-  await PermissionsAndroid.requestMultiple([
-    PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-  ]);
-};
 
 function ThemedText({children, style, ...attributes}: TextProps): JSX.Element {
   const scheme = useColorScheme();
@@ -65,6 +59,8 @@ function App(): JSX.Element {
   const frequency = useRef<number | null>();
   const xAnimation = useRef(new Animated.Value(0)).current;
   const yAnimation = useRef(new Animated.Value(0)).current;
+  const requestAnimationFrameRef = useRef(0);
+  const lastUpdateRef = useRef(0);
 
   const [accidentalMode, setAccidentalMode] = useState(ACCIDENTAL_MODE.SHARP);
   const [isPortraitMode, setIsPortraitMode] = useState(
@@ -101,28 +97,46 @@ function App(): JSX.Element {
     );
   };
 
-  const onPressDonateLink = async () => {
-    // Checking if the link is supported for links with custom URL scheme.
-    const supported = await Linking.canOpenURL(DONATION_LINK);
-
-    if (supported) {
-      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-      // by some browser in the mobile
-      await Linking.openURL(DONATION_LINK);
-    }
-  };
-
-  const onRecordingData = (data: Float32Array) => {
-    console.log('js', data);
-    // we save the frequency into a ref in order to prevent
-    // react from rerendering on every frequency detection
-    const pitch = PitchFinder(data);
-    frequency.current = pitch;
-  };
-
-  const rafRef = useRef(0);
-  const lastUpdateRef = useRef(0);
   useEffect(() => {
+    // setup audio recording
+    const onRecordingData = (data: Float32Array) => {
+      // we save the frequency into a ref in order to prevent
+      // react from rerendering on every frequency detection
+      const pitch = PitchFinder(data);
+      frequency.current = pitch;
+    };
+
+    const setupAudioRecording = async () => {
+      // android permissions
+      if (Platform.OS === 'android') {
+        const hasRecordAudioPermissions = await PermissionsAndroid.check(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        );
+
+        if (hasRecordAudioPermissions) {
+          console.log('has audio permissions');
+        } else {
+          console.log('no audio permissions');
+          await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+          ]);
+        }
+      }
+
+      // setup and start Recording
+      AudioStreamModule.setup(
+        {
+          bufferSize: BUFFER_SIZE,
+          sampleRate: SAMPLE_RATE,
+        },
+        onRecordingData,
+      );
+
+      AudioStreamModule.start();
+    };
+    setupAudioRecording();
+
+    // setup update loop
     const update = (time: number) => {
       const delta = time - lastUpdateRef.current;
       if (delta > UPDATE_FRAME_RATE) {
@@ -131,24 +145,9 @@ function App(): JSX.Element {
         }
         lastUpdateRef.current = time;
       }
-      rafRef.current = requestAnimationFrame(update);
+      requestAnimationFrameRef.current = requestAnimationFrame(update);
     };
-    rafRef.current = requestAnimationFrame(update);
-
-    // android permissions
-    if (Platform.OS === 'android') {
-      getAndroidPermissions();
-    }
-
-    // setup and start Recording
-    AudioStreamModule.setup(
-      {
-        bufferSize: BUFFER_SIZE,
-        sampleRate: SAMPLE_RATE,
-      },
-      onRecordingData,
-    );
-    AudioStreamModule.start();
+    requestAnimationFrameRef.current = requestAnimationFrame(update);
 
     // determine orientation
     const dimensionsChange = Dimensions.addEventListener(
@@ -157,8 +156,8 @@ function App(): JSX.Element {
     );
 
     return () => {
-      cancelAnimationFrame(rafRef.current);
       AudioStreamModule.stop();
+      cancelAnimationFrame(requestAnimationFrameRef.current);
       dimensionsChange.remove();
     };
   }, []);
@@ -210,24 +209,6 @@ function App(): JSX.Element {
         }}>
         {Math.round(currentFrequency)}Hz
       </ThemedText>
-
-      {/* Paypal donation link */}
-      <TouchableOpacity
-        onPress={onPressDonateLink}
-        style={{
-          bottom: 0,
-          position: 'absolute',
-          right: 0,
-          padding: 32,
-        }}>
-        <ThemedText
-          style={{
-            fontSize: 12,
-            textAlign: 'right',
-          }}>
-          💲
-        </ThemedText>
-      </TouchableOpacity>
 
       {/* Target */}
       <View
