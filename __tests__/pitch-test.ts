@@ -1,5 +1,8 @@
 import { ACCIDENTAL_MODE, getPitchedNote } from "../src/pitch.service";
 
+// Note: import explicitly to use the types shipped with jest.
+import {it} from '@jest/globals';
+
 describe('pitch calculations', () => {
 
   it("identifies the correct note", () => {
