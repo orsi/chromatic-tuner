@@ -26,8 +26,10 @@ class AudioStream: RCTEventEmitter {
   
   @objc
   func setup(_ options: NSDictionary?) {
-    bufferSize = options?["bufferSize"] as? UInt32 ?? bufferSize
-    sampleRate = options?["sampleRate"] as? UInt32 ?? sampleRate
+//  TODO: No reason to really get sample rate from frontend until we make
+//    this more robust as a library
+//    bufferSize = options?["bufferSize"] as? UInt32 ?? bufferSize
+//    sampleRate = options?["sampleRate"] as? UInt32 ?? sampleRate
     
     let status = AVCaptureDevice.authorizationStatus(for: .audio)
     if status == .notDetermined {

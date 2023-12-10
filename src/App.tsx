@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {
   Animated,
   Dimensions,
-  Linking,
   PermissionsAndroid,
   Platform,
   SafeAreaView,
@@ -17,7 +16,10 @@ import pitchfinder from 'pitchfinder';
 import {ACCIDENTAL_MODE, getPitchedNote, IPitchedNote} from './pitch.service';
 
 const ACCURACY_GOOD = 10;
+
+// TODO: This will be determined by native modules
 const BUFFER_SIZE = 4096;
+// TODO: Native module should use this, but it doesn't for now
 const SAMPLE_RATE = 44100;
 const UPDATE_FRAME_RATE = 1000 / 60;
 const DEFAULT_NOTE: IPitchedNote = {
@@ -27,7 +29,6 @@ const DEFAULT_NOTE: IPitchedNote = {
   note: 'A',
   octave: 4,
 };
-const DONATION_LINK = `https://www.paypal.com/donate/?business=VEECFWLFK3QCQ&amount=1&no_recurring=0&item_name=a+cup+of+coffee+or+snack%21&currency_code=CAD`;
 const GOOD_RGBA = 'rgba(0,255,125,.6)';
 const TARGET_BG_COLOR = 'rgb(200,200,200)';
 const TARGET_BG_COLOR_DARK = 'rgba(255,255,255,.2)';
@@ -70,6 +71,15 @@ function App(): JSX.Element {
     DEFAULT_NOTE.frequency,
   );
 
+  // handlers
+  const onPressAccidentalToggleButton = () => {
+    setAccidentalMode(
+      accidentalMode !== ACCIDENTAL_MODE.SHARP
+        ? ACCIDENTAL_MODE.SHARP
+        : ACCIDENTAL_MODE.FLAT,
+    );
+  };
+
   // derived state
   const currentNote = getPitchedNote(currentFrequency, accidentalMode);
   const isAccuracyGoodEnough =
@@ -81,21 +91,6 @@ function App(): JSX.Element {
   const absCent = currentNote.cents != null ? Math.abs(currentNote.cents) : 0;
   const red = Math.floor((absCent / 50) * 50) + 200;
   const green = Math.floor((1 - absCent / 50) * 255);
-
-  // handlers
-  const onChangeDimensions = () => {
-    const width = Dimensions.get('window').width;
-    const height = Dimensions.get('window').height;
-    setIsPortraitMode(width < height);
-  };
-
-  const onPressAccidentalToggleButton = () => {
-    setAccidentalMode(
-      accidentalMode !== ACCIDENTAL_MODE.SHARP
-        ? ACCIDENTAL_MODE.SHARP
-        : ACCIDENTAL_MODE.FLAT,
-    );
-  };
 
   useEffect(() => {
     // setup audio recording
@@ -114,9 +109,8 @@ function App(): JSX.Element {
         );
 
         if (hasRecordAudioPermissions) {
-          console.log('has audio permissions');
+          // no need for permissions
         } else {
-          console.log('no audio permissions');
           await PermissionsAndroid.requestMultiple([
             PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
           ]);
@@ -150,6 +144,11 @@ function App(): JSX.Element {
     requestAnimationFrameRef.current = requestAnimationFrame(update);
 
     // determine orientation
+    const onChangeDimensions = () => {
+      const width = Dimensions.get('window').width;
+      const height = Dimensions.get('window').height;
+      setIsPortraitMode(width < height);
+    };
     const dimensionsChange = Dimensions.addEventListener(
       'change',
       onChangeDimensions,
