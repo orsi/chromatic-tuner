@@ -70,3 +70,7 @@ buck-out/
 
 # testing
 /coverage
+
+# Android builds
+android/app/release/
+*.pem

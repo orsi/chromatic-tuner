@@ -14,14 +14,12 @@ import {
 import AudioStreamModule from './AudioStreamModule';
 import pitchfinder from 'pitchfinder';
 import {ACCIDENTAL_MODE, getPitchedNote, IPitchedNote} from './pitch.service';
+import {EmitterSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
 const ACCURACY_GOOD = 10;
-
-// TODO: This will be determined by native modules
-const BUFFER_SIZE = 4096;
 // TODO: Native module should use this, but it doesn't for now
 const SAMPLE_RATE = 44100;
-const UPDATE_FRAME_RATE = 1000 / 60;
+const UPDATE_FRAME_RATE = 1000 / 30;
 const DEFAULT_NOTE: IPitchedNote = {
   accidental: 'natural',
   cents: 0,
@@ -30,10 +28,11 @@ const DEFAULT_NOTE: IPitchedNote = {
   octave: 4,
 };
 const GOOD_RGBA = 'rgba(0,255,125,.6)';
+const BAD_RGBA = 'rgba(255,0,50,.6)';
 const TARGET_BG_COLOR = 'rgb(200,200,200)';
 const TARGET_BG_COLOR_DARK = 'rgba(255,255,255,.2)';
 const TARGET_SIZE = 200;
-const BG_COLOR = 'rgb(240,240,240)';
+const BG_COLOR = 'rgb(250,250,255)';
 const BG_COLOR_DARK = 'rgb(20,20,20)';
 const TEXT_COLOR = 'rgb(0,0,0)';
 const TEXT_COLOR_DARK = 'rgb(240,240,240)';
@@ -60,13 +59,8 @@ function App(): JSX.Element {
   const frequency = useRef<number | null>();
   const xAnimation = useRef(new Animated.Value(0)).current;
   const yAnimation = useRef(new Animated.Value(0)).current;
-  const requestAnimationFrameRef = useRef(0);
-  const lastUpdateRef = useRef(0);
-
+  const colorAnimation = useRef(new Animated.Value(0)).current;
   const [accidentalMode, setAccidentalMode] = useState(ACCIDENTAL_MODE.SHARP);
-  const [isPortraitMode, setIsPortraitMode] = useState(
-    Dimensions.get('window').width < Dimensions.get('window').height,
-  );
   const [currentFrequency, setCurrentFrequency] = useState<number>(
     DEFAULT_NOTE.frequency,
   );
@@ -80,20 +74,10 @@ function App(): JSX.Element {
     );
   };
 
-  // derived state
-  const currentNote = getPitchedNote(currentFrequency, accidentalMode);
-  const isAccuracyGoodEnough =
-    currentNote.cents != null &&
-    currentNote.cents > -ACCURACY_GOOD &&
-    currentNote.cents < ACCURACY_GOOD;
-  // if close enough, lock to center
-  const interp = isAccuracyGoodEnough ? 0 : currentNote.cents / 50;
-  const absCent = currentNote.cents != null ? Math.abs(currentNote.cents) : 0;
-  const red = Math.floor((absCent / 50) * 50) + 200;
-  const green = Math.floor((1 - absCent / 50) * 255);
-
+  // setup audio
   useEffect(() => {
     // setup audio recording
+
     const onRecordingData = (data: Float32Array) => {
       // we save the frequency into a ref in order to prevent
       // react from rerendering on every frequency detection
@@ -101,8 +85,8 @@ function App(): JSX.Element {
       frequency.current = pitch;
     };
 
+    let onAudioSubscription: EmitterSubscription;
     const setupAudioRecording = async () => {
-      // android permissions
       if (Platform.OS === 'android') {
         const hasRecordAudioPermissions = await PermissionsAndroid.check(
           PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
@@ -117,75 +101,77 @@ function App(): JSX.Element {
         }
       }
 
-      // setup and start Recording
-      AudioStreamModule.setup(
-        {
-          bufferSize: BUFFER_SIZE,
-          sampleRate: SAMPLE_RATE,
-        },
-        onRecordingData,
-      );
-
-      AudioStreamModule.start();
+      onAudioSubscription = AudioStreamModule.start(onRecordingData);
     };
     setupAudioRecording();
 
-    // setup update loop
-    const update = (time: number) => {
-      const delta = time - lastUpdateRef.current;
-      if (delta > UPDATE_FRAME_RATE) {
-        if (frequency.current != null && frequency.current < 10000) {
-          setCurrentFrequency(frequency.current);
-        }
-        lastUpdateRef.current = time;
-      }
-      requestAnimationFrameRef.current = requestAnimationFrame(update);
-    };
-    requestAnimationFrameRef.current = requestAnimationFrame(update);
-
-    // determine orientation
-    const onChangeDimensions = () => {
-      const width = Dimensions.get('window').width;
-      const height = Dimensions.get('window').height;
-      setIsPortraitMode(width < height);
-    };
-    const dimensionsChange = Dimensions.addEventListener(
-      'change',
-      onChangeDimensions,
-    );
-
     return () => {
+      onAudioSubscription.remove();
       AudioStreamModule.stop();
-      cancelAnimationFrame(requestAnimationFrameRef.current);
-      dimensionsChange.remove();
     };
   }, []);
 
   useEffect(() => {
-    if (isPortraitMode) {
-      Animated.timing(xAnimation, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }).start();
-      Animated.timing(yAnimation, {
-        toValue: (-interp * Dimensions.get('window').height) / 2,
-        duration: 100,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(xAnimation, {
-        toValue: (interp * Dimensions.get('window').width) / 2,
-        duration: 100,
-        useNativeDriver: true,
-      }).start();
-      Animated.timing(yAnimation, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [currentNote]);
+    // setup update loop
+    let raf = 0;
+    let lastUpdate = 0;
+
+    const update = (time: number) => {
+      const delta = time - lastUpdate;
+      if (delta > UPDATE_FRAME_RATE) {
+        if (frequency.current != null && frequency.current < 10000) {
+          setCurrentFrequency(frequency.current);
+        }
+        lastUpdate = time;
+      }
+      raf = requestAnimationFrame(update);
+    };
+
+    raf = requestAnimationFrame(update);
+
+    return () => {
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const currentNote = getPitchedNote(currentFrequency, accidentalMode);
+  const isAccuracyGoodEnough =
+    currentNote.cents != null &&
+    currentNote.cents > -ACCURACY_GOOD &&
+    currentNote.cents < ACCURACY_GOOD;
+
+  // if close enough, lock to center
+  const normalize = isAccuracyGoodEnough ? 0 : Math.abs(currentNote.cents) / 50;
+  const interp = isAccuracyGoodEnough ? 0 : currentNote.cents / 50;
+  let xAnimationToValue = 0;
+  let yAnimationToValue = 0;
+  const width = Dimensions.get('window').width;
+  const height = Dimensions.get('window').height;
+  if (width < height) {
+    yAnimationToValue = (-interp * Dimensions.get('window').height) / 2;
+  } else {
+    xAnimationToValue = (interp * Dimensions.get('window').width) / 2;
+  }
+
+  Animated.timing(xAnimation, {
+    toValue: xAnimationToValue,
+    duration: 200,
+    useNativeDriver: true,
+  }).start();
+  Animated.timing(yAnimation, {
+    toValue: yAnimationToValue,
+    duration: 200,
+    useNativeDriver: true,
+  }).start();
+  Animated.timing(colorAnimation, {
+    toValue: normalize,
+    duration: 200,
+    useNativeDriver: true,
+  }).start();
+  const color = colorAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [GOOD_RGBA, BAD_RGBA],
+  });
 
   return (
     <SafeAreaView
@@ -224,9 +210,7 @@ function App(): JSX.Element {
         {/* Cents Tracker */}
         <Animated.View
           style={{
-            backgroundColor: isAccuracyGoodEnough
-              ? GOOD_RGBA
-              : `rgba(${red},${green},50, .6)`,
+            backgroundColor: isAccuracyGoodEnough ? GOOD_RGBA : color,
             borderRadius: TARGET_SIZE,
             height: TARGET_SIZE,
             left: 0,

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "clean:android": "rm -rf ./android/.gradle",
+    "clean:android": "rm -rf ./android/.gradle ./android/**/build",
     "clean:ios": "rm -rf ./ios/build ./ios/Pods",
     "clean:node": "rm -rf ./node_modules",
     "clean": "npm run clean:android & npm run clean:ios & npm run clean:node",

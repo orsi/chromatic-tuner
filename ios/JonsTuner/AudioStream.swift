@@ -4,7 +4,7 @@ import React
 @objc(AudioStream)
 class AudioStream: RCTEventEmitter {
   var engine: AVAudioEngine?
-  var bufferSize: UInt32 = 4096
+  var bufferSize: UInt32 = 8192
   var sampleRate: UInt32 = 44100
   
   override init() {
@@ -25,12 +25,7 @@ class AudioStream: RCTEventEmitter {
   }
   
   @objc
-  func setup(_ options: NSDictionary?) {
-//  TODO: No reason to really get sample rate from frontend until we make
-//    this more robust as a library
-//    bufferSize = options?["bufferSize"] as? UInt32 ?? bufferSize
-//    sampleRate = options?["sampleRate"] as? UInt32 ?? sampleRate
-    
+  func start() {
     let status = AVCaptureDevice.authorizationStatus(for: .audio)
     if status == .notDetermined {
       AVCaptureDevice.requestAccess(for: .audio, completionHandler: { result in
@@ -38,10 +33,6 @@ class AudioStream: RCTEventEmitter {
       })
     }
     
-  }
-
-  @objc
-  func start() {
     if let engine = engine {
       let session = AVAudioSession.sharedInstance()
       try? session.setPreferredSampleRate(Double(sampleRate))
@@ -75,15 +66,5 @@ class AudioStream: RCTEventEmitter {
   func stop() {
     engine?.inputNode.removeTap(onBus: 0)
     engine?.stop()
-  }
-  
-  @objc
-  func getBufferSize() -> UInt32 {
-    return bufferSize
-  }
-  
-  @objc
-  func getSampleRate() -> UInt32 {
-    return sampleRate
   }
 }
