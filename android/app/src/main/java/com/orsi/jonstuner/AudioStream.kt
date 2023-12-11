@@ -22,15 +22,9 @@ class AudioStream(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     private var audioRecord: AudioRecord? = null
     private var recordingThread: Thread? = null
     private var isRecordingAudio: Boolean = false
-    private var bufferSize: Int = 4096;
-    private var sampleRate: Int = 48000;
+    private var sampleRateInHz: Int = 44100
+    private var bufferSize: Int = 8192
 
-    @ReactMethod fun setup(options: ReadableMap?) {
-        val requestedBufferSize = if (options!!.hasKey("bufferSize")) options!!.getInt("bufferSize") else bufferSize
-        val requestedSampleRate = if (options!!.hasKey("sampleRate")) options!!.getInt("sampleRate") else sampleRate
-        bufferSize = requestedBufferSize
-        sampleRate = requestedSampleRate
-    }
     @ReactMethod fun start() {
         val recordAudioPermission = ActivityCompat.checkSelfPermission(reactApplicationContext, Manifest.permission.RECORD_AUDIO)
         val isPermissionGranted = recordAudioPermission == PackageManager.PERMISSION_GRANTED;
@@ -40,11 +34,9 @@ class AudioStream(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             return;
         }
 
-        val sampleRateInHz = 44100
         val channelConfig = AudioFormat.CHANNEL_IN_MONO
         val audioFormat = AudioFormat.ENCODING_PCM_16BIT
-        val minBufferSizeInBytes = AudioRecord.getMinBufferSize(sampleRateInHz, channelConfig, audioFormat)
-        audioRecord = AudioRecord(MediaRecorder.AudioSource.MIC, sampleRateInHz, channelConfig, audioFormat, minBufferSizeInBytes)
+        audioRecord = AudioRecord(MediaRecorder.AudioSource.MIC, sampleRateInHz, channelConfig, audioFormat, bufferSize)
 
         if (audioRecord!!.state != AudioRecord.STATE_INITIALIZED) {
             // can't do anything here if it never initialized
@@ -56,7 +48,7 @@ class AudioStream(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 
         // start recording thread to poll for audio data
         recordingThread = thread(true) {
-            val shorts = ShortArray(minBufferSizeInBytes / 2)
+            val shorts = ShortArray(bufferSize / 2)
             while (isRecordingAudio) {
                 audioRecord!!.read(shorts, 0, shorts.size)
                 val floats = shorts.map{ it.toFloat() }.toFloatArray()
@@ -73,12 +65,6 @@ class AudioStream(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             audioRecord = null
             recordingThread = null
         }
-    }
-    @ReactMethod fun getBufferSize() {
-        Log.d("AudioStream","getBufferSize");
-    }
-    @ReactMethod fun getSampleRate() {
-        Log.d("AudioStream","getSampleRate");
     }
 
     private fun sendEvent(reactContext: ReactContext, eventName: String, params: WritableArray?) {
