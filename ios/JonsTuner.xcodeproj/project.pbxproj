@@ -12,8 +12,6 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		60E979D32A818696009B8AE0 /* AudioStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E979D22A818696009B8AE0 /* AudioStream.swift */; };
-		60E979D62A81880F009B8AE0 /* AudioStreamBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 60E979D52A81880F009B8AE0 /* AudioStreamBridge.m */; };
 		7699B88040F8A987B510C191 /* libPods-JonsTuner-JonsTunerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-JonsTuner-JonsTunerTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -43,9 +41,6 @@
 		5709B34CF0A7D63546082F79 /* Pods-JonsTuner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JonsTuner.release.xcconfig"; path = "Target Support Files/Pods-JonsTuner/Pods-JonsTuner.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-JonsTuner-JonsTunerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JonsTuner-JonsTunerTests.debug.xcconfig"; path = "Target Support Files/Pods-JonsTuner-JonsTunerTests/Pods-JonsTuner-JonsTunerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-JonsTuner.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JonsTuner.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		60E979D02A818695009B8AE0 /* AudioStreamBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AudioStreamBridge.h; path = JonsTuner/AudioStreamBridge.h; sourceTree = "<group>"; };
-		60E979D22A818696009B8AE0 /* AudioStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioStream.swift; path = JonsTuner/AudioStream.swift; sourceTree = "<group>"; };
-		60E979D52A81880F009B8AE0 /* AudioStreamBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AudioStreamBridge.m; path = JonsTuner/AudioStreamBridge.m; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = JonsTuner/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-JonsTuner-JonsTunerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JonsTuner-JonsTunerTests.release.xcconfig"; path = "Target Support Files/Pods-JonsTuner-JonsTunerTests/Pods-JonsTuner-JonsTunerTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -97,9 +92,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				60E979D22A818696009B8AE0 /* AudioStream.swift */,
-				60E979D02A818695009B8AE0 /* AudioStreamBridge.h */,
-				60E979D52A81880F009B8AE0 /* AudioStreamBridge.m */,
 			);
 			name = JonsTuner;
 			sourceTree = "<group>";
@@ -422,9 +414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				60E979D62A81880F009B8AE0 /* AudioStreamBridge.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				60E979D32A818696009B8AE0 /* AudioStream.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,7 +433,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-JonsTuner-JonsTunerTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -474,7 +463,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-JonsTuner-JonsTunerTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -521,7 +509,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orsi.jonstuner;
 				PRODUCT_NAME = JonsTuner;
-				SWIFT_OBJC_BRIDGING_HEADER = JonsTuner/AudioStreamBridge.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -551,7 +538,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.orsi.jonstuner;
 				PRODUCT_NAME = JonsTuner;
-				SWIFT_OBJC_BRIDGING_HEADER = JonsTuner/AudioStreamBridge.h;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -598,6 +584,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -624,6 +611,11 @@
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -666,6 +658,10 @@
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -689,6 +685,11 @@
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
