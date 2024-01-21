@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Animated,
   Dimensions,
@@ -11,14 +11,11 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import AudioStreamModule from './AudioStreamModule';
 import pitchfinder from 'pitchfinder';
+import LiveAudioStream from 'react-native-live-audio-stream';
+import {Buffer} from 'buffer';
 import {ACCIDENTAL_MODE, getPitchedNote, IPitchedNote} from './pitch.service';
-import {EmitterSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
-const ACCURACY_GOOD = 10;
-// TODO: Native module should use this, but it doesn't for now
-const SAMPLE_RATE = 44100;
 const UPDATE_FRAME_RATE = 1000 / 30;
 const DEFAULT_NOTE: IPitchedNote = {
   accidental: 'natural',
@@ -36,7 +33,8 @@ const BG_COLOR = 'rgb(250,250,255)';
 const BG_COLOR_DARK = 'rgb(20,20,20)';
 const TEXT_COLOR = 'rgb(0,0,0)';
 const TEXT_COLOR_DARK = 'rgb(240,240,240)';
-const PitchFinder = pitchfinder.YIN({sampleRate: SAMPLE_RATE});
+
+const PitchFinder = pitchfinder.YIN();
 
 function ThemedText({children, style, ...attributes}: TextProps): JSX.Element {
   const scheme = useColorScheme();
@@ -76,17 +74,7 @@ function App(): JSX.Element {
 
   // setup audio
   useEffect(() => {
-    // setup audio recording
-
-    const onRecordingData = (data: Float32Array) => {
-      // we save the frequency into a ref in order to prevent
-      // react from rerendering on every frequency detection
-      const pitch = PitchFinder(data);
-      frequency.current = pitch;
-    };
-
-    let onAudioSubscription: EmitterSubscription;
-    const setupAudioRecording = async () => {
+    const setup = async () => {
       if (Platform.OS === 'android') {
         const hasRecordAudioPermissions = await PermissionsAndroid.check(
           PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
@@ -101,48 +89,53 @@ function App(): JSX.Element {
         }
       }
 
-      onAudioSubscription = AudioStreamModule.start(onRecordingData);
+      LiveAudioStream.init({
+        sampleRate: 44100,
+        channels: 1,
+        bitsPerSample: 8,
+        audioSource: 9,
+        bufferSize: 8192,
+        wavFile: '',
+      });
+      LiveAudioStream.on('data', data => {
+        const chunk = Float32Array.from(Buffer.from(data, 'base64'));
+        const pitch = PitchFinder(chunk);
+        frequency.current = pitch;
+      });
+      LiveAudioStream.start();
     };
-    setupAudioRecording();
 
+    setup();
     return () => {
-      onAudioSubscription.remove();
-      AudioStreamModule.stop();
+      LiveAudioStream.stop();
     };
   }, []);
 
-  useEffect(() => {
-    // setup update loop
-    let raf = 0;
-    let lastUpdate = 0;
-
-    const update = (time: number) => {
-      const delta = time - lastUpdate;
-      if (delta > UPDATE_FRAME_RATE) {
-        if (frequency.current != null && frequency.current < 10000) {
-          setCurrentFrequency(frequency.current);
-        }
-        lastUpdate = time;
+  // setup update loop
+  const rafRef = useRef(0);
+  const lastUpdateRef = useRef(Date.now());
+  const update = useCallback(() => {
+    const now = Date.now();
+    const delta = now - lastUpdateRef.current;
+    if (delta > UPDATE_FRAME_RATE) {
+      if (frequency.current != null && frequency.current < 10000) {
+        setCurrentFrequency(frequency.current);
       }
-      raf = requestAnimationFrame(update);
-    };
+      lastUpdateRef.current = now;
+    }
+    rafRef.current = requestAnimationFrame(update);
+  }, []);
 
-    raf = requestAnimationFrame(update);
-
+  useEffect(() => {
+    rafRef.current = requestAnimationFrame(update);
     return () => {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
   const currentNote = getPitchedNote(currentFrequency, accidentalMode);
-  const isAccuracyGoodEnough =
-    currentNote.cents != null &&
-    currentNote.cents > -ACCURACY_GOOD &&
-    currentNote.cents < ACCURACY_GOOD;
-
-  // if close enough, lock to center
-  const normalize = isAccuracyGoodEnough ? 0 : Math.abs(currentNote.cents) / 50;
-  const interp = isAccuracyGoodEnough ? 0 : currentNote.cents / 50;
+  const normalize = Math.abs(currentNote.cents) / 50;
+  const interp = currentNote.cents / 50;
   let xAnimationToValue = 0;
   let yAnimationToValue = 0;
   const width = Dimensions.get('window').width;
@@ -210,7 +203,7 @@ function App(): JSX.Element {
         {/* Cents Tracker */}
         <Animated.View
           style={{
-            backgroundColor: isAccuracyGoodEnough ? GOOD_RGBA : color,
+            backgroundColor: color,
             borderRadius: TARGET_SIZE,
             height: TARGET_SIZE,
             left: 0,
