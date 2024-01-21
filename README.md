@@ -1,11 +1,11 @@
-# Jon's Tuner
+# Chromatic Tuner
 
 ## Installation
 Make sure to install all necessary tools for react-native by following (this guide)[https://reactnative.dev/docs/environment-setup].
 
 ```bash
-git clone git@github.com:orsi/jonstuner.git
-cd jonstuner
+git clone git@github.com:orsi/chromatic-tuner.git
+cd chromatic-tuner
 npm ci
 ```
 
