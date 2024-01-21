@@ -34,14 +34,6 @@ const BG_COLOR_DARK = 'rgb(20,20,20)';
 const TEXT_COLOR = 'rgb(0,0,0)';
 const TEXT_COLOR_DARK = 'rgb(240,240,240)';
 
-LiveAudioStream.init({
-  sampleRate: 44100,
-  channels: 1,
-  bitsPerSample: 8,
-  audioSource: 9,
-  bufferSize: 8192,
-  wavFile: '',
-});
 const PitchFinder = pitchfinder.YIN();
 
 function ThemedText({children, style, ...attributes}: TextProps): JSX.Element {
@@ -97,6 +89,14 @@ function App(): JSX.Element {
         }
       }
 
+      LiveAudioStream.init({
+        sampleRate: 44100,
+        channels: 1,
+        bitsPerSample: 8,
+        audioSource: 9,
+        bufferSize: 8192,
+        wavFile: '',
+      });
       LiveAudioStream.on('data', data => {
         const chunk = Float32Array.from(Buffer.from(data, 'base64'));
         const pitch = PitchFinder(chunk);
