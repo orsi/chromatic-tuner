@@ -1,6 +1,6 @@
 {
-  "name": "jonstuner",
-  "version": "0.0.1",
+  "name": "chromatic-tuner",
+  "version": "2.2.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
